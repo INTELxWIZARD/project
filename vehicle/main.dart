@@ -54,7 +54,6 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
     ],
   };
 
-  // Example regular expression for a generic number plate format
   final RegExp numberPlateRegExp = RegExp(
     r'^[A-Z]{2}\s\d{2}\s[A-Z]{1,2}\s\d{1,4}$',
   );
@@ -64,130 +63,130 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8.0,
-              ),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.arrow_back),
-                  ),
-                  const Spacer(),
-                ],
-              ),
-            ),
-            const Text(
-              'Add a vehicle',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 20),
-            CircleAvatar(
-              radius: 100,
-              backgroundColor: Colors.grey[300],
-              child: ClipOval(
-                child: Image.asset(
-                  'assets/carss.png',
-                  fit: BoxFit.cover,
-                  width: 190,
-                  height: 190,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.arrow_back),
+                    ),
+                    const Spacer(),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'vehicle details',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              const Text(
+                'Add a vehicle',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'add your vehicle details below',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Color.fromARGB(255, 102, 101, 101),
+              const SizedBox(height: 20),
+              CircleAvatar(
+                radius: 100,
+                backgroundColor: Colors.grey[300],
+                child: ClipOval(
+                  child: Image.asset(
+                    'assets/carss.png',
+                    fit: BoxFit.cover,
+                    width: 190,
+                    height: 190,
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            _buildDropdownField(
-              hint: 'your vehicle Type',
-              value: selectedVehicleType,
-              items: ['Car', 'Bike'],
-              onChanged: (value) {
-                setState(() {
-                  selectedVehicleType = value;
-                  selectedVehicleBrand = null; // Reset brand selection
-                });
-              },
-            ),
-            const SizedBox(height: 15), // Increased gap
-            _buildNumberPlateField(),
-            const SizedBox(height: 15), // Increased gap
-            _buildDropdownField(
-              hint: 'vehicle brand',
-              value: selectedVehicleBrand,
-              items:
-                  selectedVehicleType != null
-                      ? vehicleBrands[selectedVehicleType!] ?? []
-                      : [],
-              onChanged: (value) {
-                setState(() {
-                  selectedVehicleBrand = value;
-                });
-              },
-            ),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 20,
-              ),
-              child: ElevatedButton(
-                onPressed: () {
-                  if (_validateNumberPlate()) {
-                    // Proceed with valid input
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Vehicle added successfully'),
-                      ),
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey[800],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Center(
+              const SizedBox(height: 20),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
                   child: Text(
-                    'Continue',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    'vehicle details',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
-            ),
-          ],
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'add your vehicle details below',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Color.fromARGB(255, 102, 101, 101),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              _buildDropdownField(
+                hint: 'your vehicle Type',
+                value: selectedVehicleType,
+                items: ['Car', 'Bike'],
+                onChanged: (value) {
+                  setState(() {
+                    selectedVehicleType = value;
+                    selectedVehicleBrand = null;
+                  });
+                },
+              ),
+              const SizedBox(height: 15),
+              _buildNumberPlateField(),
+              const SizedBox(height: 15),
+              _buildDropdownField(
+                hint: 'vehicle brand',
+                value: selectedVehicleBrand,
+                items:
+                    selectedVehicleType != null
+                        ? vehicleBrands[selectedVehicleType!] ?? []
+                        : [],
+                onChanged: (value) {
+                  setState(() {
+                    selectedVehicleBrand = value;
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 20,
+                ),
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_validateNumberPlate()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Vehicle added successfully'),
+                        ),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey[800],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Continue',
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -208,7 +207,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
               controller: numberPlateController,
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.tag, color: Colors.grey[700]),
-                hintText: 'Number plate (e.g., MH 12 AB 1234)',
+                hintText: 'Enter number plate (e.g., MH 12 AB 1234)',
                 hintStyle: const TextStyle(color: Colors.grey),
                 border: InputBorder.none,
               ),
