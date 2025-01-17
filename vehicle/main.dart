@@ -24,6 +24,8 @@ class AddVehiclePage extends StatefulWidget {
 class _AddVehiclePageState extends State<AddVehiclePage> {
   String? selectedVehicleType;
   String? selectedVehicleBrand;
+  final TextEditingController numberPlateController = TextEditingController();
+  String? numberPlateError;
 
   final Map<String, List<String>> vehicleBrands = {
     'Car': [
@@ -51,6 +53,11 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
       'Triumph',
     ],
   };
+
+  // Example regular expression for a generic number plate format
+  final RegExp numberPlateRegExp = RegExp(
+    r'^[A-Z]{2}\s\d{2}\s[A-Z]{1,2}\s\d{1,4}$',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +140,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
               },
             ),
             const SizedBox(height: 15), // Increased gap
-            _buildInputField(Icons.tag, 'vehicle no.plate'),
+            _buildNumberPlateField(),
             const SizedBox(height: 15), // Increased gap
             _buildDropdownField(
               hint: 'vehicle brand',
@@ -155,7 +162,16 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                 vertical: 20,
               ),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  if (_validateNumberPlate()) {
+                    // Proceed with valid input
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Vehicle added successfully'),
+                      ),
+                    );
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey[800],
                   shape: RoundedRectangleBorder(
@@ -177,22 +193,36 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
     );
   }
 
-  Widget _buildInputField(IconData icon, String hint) {
+  Widget _buildNumberPlateField() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: TextField(
-          decoration: InputDecoration(
-            prefixIcon: Icon(icon, color: Colors.grey[700]),
-            hintText: hint,
-            hintStyle: const TextStyle(color: Colors.grey),
-            border: InputBorder.none,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: TextField(
+              controller: numberPlateController,
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.tag, color: Colors.grey[700]),
+                hintText: 'Number plate (e.g., MH 12 AB 1234)',
+                hintStyle: const TextStyle(color: Colors.grey),
+                border: InputBorder.none,
+              ),
+            ),
           ),
-        ),
+          if (numberPlateError != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                numberPlateError!,
+                style: const TextStyle(color: Colors.red, fontSize: 12),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -228,5 +258,20 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
         ),
       ),
     );
+  }
+
+  bool _validateNumberPlate() {
+    final input = numberPlateController.text.trim();
+    if (numberPlateRegExp.hasMatch(input)) {
+      setState(() {
+        numberPlateError = null;
+      });
+      return true;
+    } else {
+      setState(() {
+        numberPlateError = 'Invalid number plate format';
+      });
+      return false;
+    }
   }
 }
