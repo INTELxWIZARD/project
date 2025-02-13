@@ -21,6 +21,9 @@ class AddVehicleHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Vehicle Details'),
@@ -32,35 +35,35 @@ class AddVehicleHomePage extends StatelessWidget {
         children: [
           Column(
             children: [
-              const SizedBox(height: 72), // 3 cm space from the heading
+              SizedBox(height: screenHeight * 0.1), // 10% of screen height
               Center(
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                  margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 255, 255),
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Image.asset(
                     'assets/carss.png', // Replace with your image path
                     fit: BoxFit.cover,
-                    height: 400,
-                    width: 400,
+                    height: screenHeight * 0.4, // 40% of screen height
+                    width: screenWidth * 0.8, // 80% of screen width
                   ),
                 ),
               ),
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 20.0),
+            padding: EdgeInsets.only(bottom: screenHeight * 0.03),
             child: ElevatedButton(
               onPressed: () {
                 _showAddVehicleBottomSheet(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.grey[800],
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 50,
-                  vertical: 16,
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.2,
+                  vertical: screenHeight * 0.02,
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -80,11 +83,10 @@ class AddVehicleHomePage extends StatelessWidget {
   void _showAddVehicleBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // Make the bottom sheet scrollable
-      backgroundColor:
-          Colors.transparent, // Remove background to make it smooth
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
-        return AddVehiclePopup();
+        return const AddVehiclePopup();
       },
     );
   }
@@ -150,24 +152,31 @@ class _AddVehiclePopupState extends State<AddVehiclePopup> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
+      padding: EdgeInsets.all(screenWidth * 0.05),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 3, 0, 0),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
+        color: Colors.grey[900],
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
         ),
       ),
-      padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
               'Add Vehicle Details',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: screenHeight * 0.02),
             _buildDropdownField(
               hint: 'Select Vehicle Type',
               value: selectedVehicleType,
@@ -175,11 +184,11 @@ class _AddVehiclePopupState extends State<AddVehiclePopup> {
               onChanged: (value) {
                 setState(() {
                   selectedVehicleType = value;
-                  selectedVehicleBrand = null; // Reset brand when type changes
+                  selectedVehicleBrand = null;
                 });
               },
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: screenHeight * 0.02),
             _buildDropdownField(
               hint: 'Select Vehicle Brand',
               value: selectedVehicleBrand,
@@ -193,31 +202,24 @@ class _AddVehiclePopupState extends State<AddVehiclePopup> {
                 });
               },
             ),
-            const SizedBox(height: 40),
+            SizedBox(height: screenHeight * 0.02),
             _buildNumberPlateField(),
-            const SizedBox(height: 40),
+            SizedBox(height: screenHeight * 0.03),
             ElevatedButton(
               onPressed: _submitDetails,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 20,
-                  horizontal: 60,
-                ), // Increased padding
+                backgroundColor: Colors.blueAccent,
+                padding: EdgeInsets.symmetric(
+                  vertical: screenHeight * 0.02,
+                  horizontal: screenWidth * 0.3,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
-                minimumSize: Size(
-                  30,
-                  60,
-                ), // Set a minimum height for the button
               ),
               child: const Text(
                 'Submit',
-                style: TextStyle(
-                  fontSize: 22, // Increased font size
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
+                style: TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
           ],
@@ -235,8 +237,9 @@ class _AddVehiclePopupState extends State<AddVehiclePopup> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 255, 255),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade400),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
@@ -248,6 +251,8 @@ class _AddVehiclePopupState extends State<AddVehiclePopup> {
                 return DropdownMenuItem<String>(value: item, child: Text(item));
               }).toList(),
           onChanged: onChanged,
+          dropdownColor: Colors.white,
+          style: const TextStyle(color: Colors.black),
         ),
       ),
     );
@@ -256,8 +261,9 @@ class _AddVehiclePopupState extends State<AddVehiclePopup> {
   Widget _buildNumberPlateField() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 255, 255),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade400),
       ),
       child: TextField(
         controller: numberPlateController,
